@@ -9,11 +9,11 @@ services:
       - '8080:8080'
       - '50000:50000'
     volumes:
-      - /var/jenkins_volume:/d/devops/projects/devopsnext/docker-vol/jenkins
+      - /tmp:/opt
 
   template-creation:
     image: devopsnext/simpleci-template-creation:0.1
     ports:
       - '8000:8000'
     volumes:
-      - /var/jenkins_volume:/d/devops/projects/devopsnext/docker-vol/jenkins
+      - /tmp:/opt/jenkins
