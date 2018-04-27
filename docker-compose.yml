@@ -1,19 +1,36 @@
 version: '2'
 
 services:
-  jenkins:
-    image: devopsnext/simpleci:0.1
-    links: 
-      - template-creation
-    ports:
-      - '8080:8080'
-      - '50000:50000'
-    volumes:
-      - /tmp:/opt
-
   template-creation:
     image: devopsnext/simpleci-template-creation:0.1
     ports:
       - '8000:8000'
     volumes:
       - /tmp:/app/output
+      
+  sonarQube:
+    image: sonarqube:lts-alpine
+    links: 
+      - template-creation
+    ports:
+      - '9000:9000'
+      - '9092:9092'
+    volumes:
+      - /tmp:/opt/sonarqube/data
+      
+  nexus:
+    image: sonatype/nexus3
+    ports:
+      - '8081:8081'
+    volumes:
+      - /tmp:/nexus-data
+
+  jenkins:
+    image: devopsnext/simpleci:0.1
+    links: 
+      - nexus
+    ports:
+      - '8080:8080'
+      - '50000:50000'
+    volumes:
+      - /tmp:/opt
